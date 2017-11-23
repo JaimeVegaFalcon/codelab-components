@@ -121,7 +121,10 @@ prevent syntax highlighting code blocks, respectively:
                 <paper-icon-button icon="arrow-back" on-tap="_goToHome"></paper-icon-button>
               </template>
             </div>
-            <h3 class="title">[[title]]</h3>
+            <h3 class="title">
+                <iron-icon icon="timeline"></iron-icon>
+              [[title]]
+            </h3>
             <div title="Time remaining" hidden$="{{!_isPositiveNum(duration)}}"
                  class="countdown layout horizontal">
               <iron-icon icon="schedule"></iron-icon> <span>{{remaining}}</span>
