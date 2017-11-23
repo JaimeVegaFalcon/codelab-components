@@ -10,7 +10,7 @@
     #contentContainer {
       background-color: #e0e0e0;
     }
-    #main-toolbar {
+    #topBar {
       background-color: #39464e !important;
     }
   </style>
@@ -18,22 +18,139 @@
 <body unresolved>
     <google-codelab title="Measure Widgets">
       <google-codelab-step label="Introduction" step="1" duration="3">
-          <pre><code>Code here</code></pre> 
+          <p>
+            <img 
+                style="max-width: 400.00px;    
+                       display: block;
+                        margin-left: auto;
+                        margin-right: auto" 
+                src="./static/result.jpg" 
+                width="100" 
+                alt="">   
+          </p>
+          <p>In this Falcong In-front workshop, You'll create a fully working Measure Widget combining
+              <a href="https://github.com/FalconSocial/falcon-ng-components/blob/master/readme.md" target="_blank">
+                falcon ng components
+            </a>  
+              using the <code>widget component</code>,
+                <a href="https://github.com/reactjs/redux/blob/master/README.md" target="_blank">
+                    Redux
+                </a> and 
+                <a href="https://github.com/reactjs/reselect/blob/master/README.md" target="_blank">
+                    Reselect
+                </a>.
+            </p>
+            <h3>What you'll learn</h3>
+            <ul class="checklist">
+                <li>How to create a widget using falcon components.</li>
+                <li>How to use a mock service that returns data for your widget.</li>
+                <li>Understand the flow of data using Redux store.</li>
+                <li>How to create a selector using Reselect that enhaces the performance of Redux.</li>
+                <li>How to use transformers to parse your data.</li>
+            </ul>
+            <h3>What you'll need</h3>
+            <ul>
+                <li>
+                    Basic knowledge of JS, HTML and CSS
+                </li>
+                <li>
+                    Basic understanding of Redux
+                </li>
+            </ul>
+          
       </google-codelab-step>
       <google-codelab-step label="Widget definition" step="2" duration="3">
-          <pre><code>Code here</code></pre>
+        <p>Let's start by creating the definition of your widget.</p>  
+        <p>You will need to go to the /widgets/widget.ts file and add a new key to the object that corresponds to the id of your widget.</p>  
+        <h3>Widget interface</h3>
+        <p>A widget has the following properties: </p>
+        <ul>
+            <li><b>id: String</b>(Mandatory) : Needs to be <b>unique</b></li>
+            <li><b>template: String </b>(Mandatory) : Name of your template with .html</li>
+            <li><b>metrics: String[] </b>(Mandatory) : Name of the metrics used.</li>
+            <li><b>serviceId: String </b>(Mandatory) : Name of your service in metrics reducer.</li>
+            <li><b>title: String </b>(Optional)</li>
+            <li><b>description : String</b> (Optional)</li>
+            <li><b>size: String </b>(Optional) : size of your widget. <b>small(default)/medium/large</b> </li>
+            
+        </ul>
+        <h3>Example</h3>
+        <pre>
+            <code>const widgets = {
+                brands_fans: {
+                    metrics: ["brands_fans_total", "brands_fans_new"],
+                    template: "brandsChart.html",
+                    id: "brands_fans",
+                    description: "This is the description of a widget",
+                    title: "Fans",
+                    serviceId: "brand_service",
+                    size: "small"
+                }
+            }
+            </code>
+        </pre>
       </google-codelab-step>
-      <google-codelab-step label="Create a template" step="3" duration="3">
-          <pre><code>Code here</code></pre>          
+      <google-codelab-step label="Create a mock service" step="3" duration="3">
+         <p>
+             Since the actual service asking the backend for data will live in the Html-Client
+            we need to mock a service that will return a response with the same format.
+        </p> 
+
+          <p>First lets register the service in the metric reducer using our serviceId.</p> 
+          <p>
+            In the variable called serviceMap, add your new service id, calling the angular service that you will have in the html client.  
+          </p>
+        <h3>Example:</h3> 
+          <pre>
+            <code>const serviceMap = {
+                    brand_service: (...args) => 
+                        $injector.get('brandOverviewAPIService')
+                            .getBrandsMetrics(...args)
+                };
+            </code>
+        </pre> 
+        <p>For the purpose of this workshop the <code>brandOverviewAPIService</code>
+            service has been created for you. 
+        </p>
+        <p>
+            Understand how the service uses mock helper functions to return a different format depending on the metric. 
+        </p>
+        <p>
+            This mock functions will take into account your selections as period and sources to return more realistic data.
+        </p>
+        <p>
+            Include your metric/s in the response you expect. 
+            In this case <code>mockLineChart</code>.
+        </p>         
       </google-codelab-step>
-      <google-codelab-step label="Mock data in your service" step="4" duration="5">
-          <pre><code>Code here</code></pre>
-      </google-codelab-step>
-      <google-codelab-step label="Create selector" step="5" duration="5">
-          <pre><code>Code here</code></pre>
-      </google-codelab-step>
-      <google-codelab-step label="Create data transformer" step="6" duration="5">
-          <pre><code>Code here</code></pre>
+      <google-codelab-step label="Create data transformer" step="4" duration="5">
+            <pre><code>Code here</code></pre>
+    </google-codelab-step>
+    <google-codelab-step label="Create selector" step="6" duration="5">
+            <pre><code>Code here</code></pre>
+    </google-codelab-step>
+    <google-codelab-step label="Create a template" step="5" duration="5">
+          <p>First of all create an html file in /wdigets/templates/ with the same name you had in your widget definition.</p> 
+          <p>Then, lets think about the pieces we need for our widget:</p> 
+          <p> We will use <code>fang-metric</code> for the top part and <code> fang-button</code> so the metrics are clickable
+             and <code>fang-linechart</code> for the chart at the bottom.
+             We will also use <code>fang-loader fang-loader-wrapper</code> to handle loadig times in the widget and 
+             <code>fang-card</code> for the widget container.
+           </p>
+           <p>So let's import them in our index.ts in src to tell my angular module that we will use them</p>
+           <pre>
+               <code>const mod = angular.module('falconWidget.measureWidgets', [
+                    components.loader.name,
+                    components.card.name,
+                    components.button.name,
+                    components.lineChart.name,
+                    components.metric.name,
+                    components.loaderWrapper.name
+                    ]);
+                </code>
+            </pre>
+            <p>So now we can have our components in in the template</p>
+            <p>Lets start by showing the widget title and description in the fang-card</p>
       </google-codelab-step>
       <google-codelab-step label="Extra visualizations?" step="7" duration="5">
           <pre><code>Code here</code></pre>          
