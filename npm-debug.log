@@ -1,0 +1,98 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/Cellar/node/8.5.0/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'i',
+1 verbose cli   '--save',
+1 verbose cli   'paper-drawer-panel' ]
+2 info using npm@3.10.10
+3 info using node@v8.5.0
+4 verbose config Skipping project config: /Users/jaimevega/.npmrc. (matches userconfig)
+5 silly loadCurrentTree Starting
+6 silly install loadCurrentTree
+7 silly install readLocalPackageData
+8 silly fetchPackageMetaData paper-drawer-panel
+9 silly fetchNamedPackageData paper-drawer-panel
+10 silly mapToRegistry name paper-drawer-panel
+11 silly mapToRegistry using default registry
+12 silly mapToRegistry registry https://npm.falcon.io/
+13 silly mapToRegistry data Result {
+13 silly mapToRegistry   raw: 'paper-drawer-panel',
+13 silly mapToRegistry   scope: null,
+13 silly mapToRegistry   escapedName: 'paper-drawer-panel',
+13 silly mapToRegistry   name: 'paper-drawer-panel',
+13 silly mapToRegistry   rawSpec: '',
+13 silly mapToRegistry   spec: 'latest',
+13 silly mapToRegistry   type: 'tag' }
+14 silly mapToRegistry uri https://npm.falcon.io/paper-drawer-panel
+15 verbose request uri https://npm.falcon.io/paper-drawer-panel
+16 verbose request no auth needed
+17 info attempt registry request try #1 at 16:10:04
+18 verbose request using bearer token for auth
+19 verbose request id 6311b854006c460e
+20 http request GET https://npm.falcon.io/paper-drawer-panel
+21 http 200 https://npm.falcon.io/paper-drawer-panel
+22 verbose headers { server: 'nginx',
+22 verbose headers   date: 'Thu, 23 Nov 2017 15:10:05 GMT',
+22 verbose headers   'content-type': 'application/json; charset=utf-8',
+22 verbose headers   'transfer-encoding': 'chunked',
+22 verbose headers   connection: 'keep-alive',
+22 verbose headers   vary: 'Accept-Encoding, Accept-Encoding',
+22 verbose headers   'x-powered-by': '@falconio/registry/7.1.0',
+22 verbose headers   etag: 'W/"7ee938561cdab02431d187cc4e4ac770"',
+22 verbose headers   'x-status-cat': 'http://flic.kr/p/aVuVsF',
+22 verbose headers   'strict-transport-security': 'max-age=31536000',
+22 verbose headers   'content-encoding': 'gzip' }
+23 silly get cb [ 200,
+23 silly get   { server: 'nginx',
+23 silly get     date: 'Thu, 23 Nov 2017 15:10:05 GMT',
+23 silly get     'content-type': 'application/json; charset=utf-8',
+23 silly get     'transfer-encoding': 'chunked',
+23 silly get     connection: 'keep-alive',
+23 silly get     vary: 'Accept-Encoding, Accept-Encoding',
+23 silly get     'x-powered-by': '@falconio/registry/7.1.0',
+23 silly get     etag: 'W/"7ee938561cdab02431d187cc4e4ac770"',
+23 silly get     'x-status-cat': 'http://flic.kr/p/aVuVsF',
+23 silly get     'strict-transport-security': 'max-age=31536000',
+23 silly get     'content-encoding': 'gzip' } ]
+24 verbose get saving paper-drawer-panel to /Users/jaimevega/.npm/npm.falcon.io/paper-drawer-panel/.cache.json
+25 verbose correctMkdir /Users/jaimevega/.npm correctMkdir not in flight; initializing
+26 silly fetchPackageMetaData Error: No compatible version found: paper-drawer-panel
+26 silly fetchPackageMetaData No valid targets found.
+26 silly fetchPackageMetaData     at pickVersionFromRegistryDocument (/usr/local/lib/node_modules/npm/lib/fetch-package-metadata.js:178:16)
+26 silly fetchPackageMetaData     at /usr/local/lib/node_modules/npm/node_modules/iferr/index.js:13:50
+26 silly fetchPackageMetaData     at /usr/local/lib/node_modules/npm/lib/utils/pulse-till-done.js:20:8
+26 silly fetchPackageMetaData     at saved (/usr/local/lib/node_modules/npm/lib/cache/caching-client.js:174:7)
+26 silly fetchPackageMetaData     at /usr/local/lib/node_modules/npm/node_modules/graceful-fs/polyfills.js:241:18
+26 silly fetchPackageMetaData     at FSReqWrap.oncomplete (fs.js:136:15)
+26 silly fetchPackageMetaData  error for paper-drawer-panel { Error: No compatible version found: paper-drawer-panel
+26 silly fetchPackageMetaData No valid targets found.
+26 silly fetchPackageMetaData     at pickVersionFromRegistryDocument (/usr/local/lib/node_modules/npm/lib/fetch-package-metadata.js:178:16)
+26 silly fetchPackageMetaData     at /usr/local/lib/node_modules/npm/node_modules/iferr/index.js:13:50
+26 silly fetchPackageMetaData     at /usr/local/lib/node_modules/npm/lib/utils/pulse-till-done.js:20:8
+26 silly fetchPackageMetaData     at saved (/usr/local/lib/node_modules/npm/lib/cache/caching-client.js:174:7)
+26 silly fetchPackageMetaData     at /usr/local/lib/node_modules/npm/node_modules/graceful-fs/polyfills.js:241:18
+26 silly fetchPackageMetaData     at FSReqWrap.oncomplete (fs.js:136:15) code: 'ETARGET' }
+27 silly rollbackFailedOptional Starting
+28 silly rollbackFailedOptional Finishing
+29 silly runTopLevelLifecycles Finishing
+30 silly install printInstalled
+31 verbose stack Error: No compatible version found: paper-drawer-panel
+31 verbose stack No valid targets found.
+31 verbose stack     at pickVersionFromRegistryDocument (/usr/local/lib/node_modules/npm/lib/fetch-package-metadata.js:178:16)
+31 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/iferr/index.js:13:50
+31 verbose stack     at /usr/local/lib/node_modules/npm/lib/utils/pulse-till-done.js:20:8
+31 verbose stack     at saved (/usr/local/lib/node_modules/npm/lib/cache/caching-client.js:174:7)
+31 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/graceful-fs/polyfills.js:241:18
+31 verbose stack     at FSReqWrap.oncomplete (fs.js:136:15)
+32 verbose cwd /Users/jaimevega/Desktop/codelab-components
+33 error Darwin 17.2.0
+34 error argv "/usr/local/Cellar/node/8.5.0/bin/node" "/usr/local/bin/npm" "i" "--save" "paper-drawer-panel"
+35 error node v8.5.0
+36 error npm  v3.10.10
+37 error code ETARGET
+38 error notarget No compatible version found: paper-drawer-panel
+38 error notarget No valid targets found.
+39 error notarget This is most likely not a problem with npm itself.
+39 error notarget In most cases you or one of your dependencies are requesting
+39 error notarget a package version that doesn't exist.
+40 verbose exit [ 1, true ]
