@@ -123,19 +123,127 @@
             In this case <code>mockLineChart</code>.
         </p>         
       </google-codelab-step>
-      <google-codelab-step label="Create data transformer" step="4" duration="5">
-            <pre><code>Code here</code></pre>
-    </google-codelab-step>
-    <google-codelab-step label="Create selector" step="6" duration="5">
-            <pre><code>Code here</code></pre>
+      <google-codelab-step label="Create selector" step="6" duration="5">
+          <h3>Reselect</h3>
+        First, lets understand what is a selector and its power.
+        <ul>
+            <li> Selectors can compute derived data, allowing Redux to store the minimal possible state.
+            </li>
+            <li>Selectors are efficient. A selector is not recomputed unless one of its arguments change.
+            </li>
+            <li>Selectors are composable. They can be used as input to other selectors.
+            </li>
+        </ul>
+        <p>
+            Reselect provides a function <code>createSelector</code> that takes and array of input-selectors and a transform function of it arguments.    
+        </p>
+        <p>
+            If the state tree changes it will call the input selectors to check if any of its arguments have changed. If not it will return the previously computed value.
+        </p>
+
+        <pre>
+            <code>const shopItemsSelector = state => state.shop.items;
+            const taxPercentSelector = state => state.shop.taxPercent;
+            const taxItemsSelector = createSelector(
+                shopItemsSelector,
+                taxPercentSelector,
+                (items, taxPercent) => items.reduce((acc, item) => acc + item.value, 0) * taxPercent;
+            )
+            </code>
+        </pre>
+        <p>
+            Only when <code>state.shop.items</code> or <code>state.shop.taxPercent</code> changes the transform function will be recomputed.
+        </p>
+        <h3>Coding</h3>
+        <p>Once we have undertand the theory, let's put it into practice.</p>
+        <p>We have to think what parts of the store our transfor function is expecting.</p>
+        <p>For our case we need the <code>raw data</code> that our service returns and the <code>channelGroups</code> resource.</p>
+        <p>Therefore we need a <code>metricSelector</code> and a <code>channelGroupSelector</code></p>
+        <pre>
+            <code>const channelGroupsSelector = (state, props) => state.resources.channelsGroups; 
+            const metricsSelector = (state, props) => state.measure.metrics[props.id]; 
+            const widgetSelector = createSelector([channelGroupsSelector, metricsSelector], 
+                (channelGroups,metricsSelector) => {
+                     //Your transform function will go here. 
+            });
+            </code>
+        </pre>
+
+        <p>Note: The props is coming from the measureWidgetComponent controller when we connect to the store and call the selector with the state and the widgetId</p>
+      </google-codelab-step>
+      <google-codelab-step label="Create a transformer function" step="4" duration="5">
+            <p>We have created our first selector, so lets create our transformer function.</p>
+            <p>As we have seen in the previous step, this function will receive the channelGroups and the raw data as parameters</p>            
+            <pre><code>const widgetDataParser = (rawData, channelGroups) => {})</code></pre>
+            <p>
+                The rawData is a metric coming from the store, a metric has the following properties:
+                <ul>
+                    <li><code>id</code></li>
+                    <li><code>data</code></li>
+                    <li><code>serviceId</code></li>
+                    <li><code>fetching</code></li>
+                    <li><code>failed</code></li>
+                </ul>
+            </p>
+            <p>We have to add some sageguars in case the metric failed or we have no data</p>
+            <pre>
+                <code>if(rawData.failed || 
+                   !rawData.data || 
+                   !Object.keys(rawData.data).length) {
+                        return rawData;
+                    }</code>
+            </pre>
+            <p> So we have to return the data prepared for our visualization.</p>
+            <p> In the /selectors/transformers/ we have a couple of visualization parser functions that will help with it.</p>
+            <p> The <code>line chart parser</code> expects the <code>metric data</code> and some <code>sources</code>.</p>
+            <p> The <code>key metric parser</code> expects the <code>metric data</code> and some <code>aggregation function</code>.</p>
+            <pre>
+                <code>const lineTotal = parseLineChartData(rawData.data.brands_fans_total, channelGroups);
+                const keyMetricTotal = parseKeyMetricSeries(rawData.data.brands_fans_total, last);
+                </code>
+            </pre>
+            <p>We will do the same for our second metric and return the parsed ready for its visualization</p>
+            <pre>
+                <code>const parsedData = [
+                    {
+                        name: 'Total',
+                        keyMetric: keyMetricTotal,
+                        lineTotal
+                    },
+                    {
+                        name: 'New',
+                        keyMetric: keyMetricNew,
+                        line: lineNew
+                    }]
+            
+                    return { ...rawData, parsedData };
+                </code>
+            </pre>
     </google-codelab-step>
     <google-codelab-step label="Create a template" step="5" duration="5">
+          <p>You have done all the most difficult parts!!</p>
+          <p>Lets consume our prepared data in our falcon components</p>
+
           <p>First of all create an html file in /wdigets/templates/ with the same name you had in your widget definition.</p> 
           <p>Then, lets think about the pieces we need for our widget:</p> 
-          <p> We will use <code>fang-metric</code> for the top part and <code> fang-button</code> so the metrics are clickable
-             and <code>fang-linechart</code> for the chart at the bottom.
-             We will also use <code>fang-loader fang-loader-wrapper</code> to handle loadig times in the widget and 
-             <code>fang-card</code> for the widget container.
+          <p> We will use:
+              <ul>
+                  <li>
+                        <code>fang-metric</code> for the numbers.
+                  </li>
+                  <li>
+                        <code>fang-button</code> so the metrics are clickable.
+                  </li>
+                  <li>
+                        <code>fang-linechart</code> for the bottom chart.
+                  </li>
+                  <li>
+                        <code>fang-loader fang-loader-wrapper</code> to handle loadig times in the widget.
+                  </li>
+                  <li>
+                        <code>fang-card</code> for the widget container.
+                  </li>
+              </ul>
            </p>
            <p>So let's import them in our index.ts in src to tell my angular module that we will use them</p>
            <pre>
@@ -149,11 +257,68 @@
                     ]);
                 </code>
             </pre>
-            <p>So now we can have our components in in the template</p>
+            <p>Now that we have our components imported, lets use them in our template</p>
             <p>Lets start by showing the widget title and description in the fang-card</p>
+            <pre>
+                <code><textarea readonly><fang-card size="small">
+                    <fang-card-content>
+                        <span class="eyas-fs2 eyas-type--bold">{{$ctrl.widget.title}}</span>
+                        <span class="eyas-icon eyas-icon-info eyas-ml5" bs-tooltip data-title="{{$ctrl.widget.description}}"></span>
+                    </fang-card-content>
+                    </fang-card>
+                </textarea>
+                </code>
+            </pre>
+            <p>
+                Then lets add the loader wrapper for our component. Since we are also sending the raw data with our parsed data, 
+                we know when we are fething the metrics.
+            </p>
+            <pre>
+                <code><textarea readonly><div style="min-height:274px">
+                    <fang-loader-wrapper loading="$ctrl.redux.metrics.fetching && !$ctrl.redux.metrics.failed" style="min-height: inherit;">
+                    </fang-loader-wrapper>
+                </div></textarea>
+                </code>
+            </pre>
+            <p> And finally lets use our fang-metric and fang-linechart</p>
+            <pre>
+                <code><textarea readonly><div class="eyas-layout">
+                        <fang-button
+                            ng-repeat="dataItem in $ctrl.redux.metrics.parsedData"
+                            state="link"
+                            class="eyas-layout eyas-layout--center eyas-ml10 eyas-mr10 eyas-pb5"
+                            style="width: 100%;"
+                        >
+                            <fang-metric label="{{ dataItem.name }}" value="dataItem.keyMetric"></fang-metric>
+                        </fang-button>
+                    </div>
+                    <div class="eyas-box eyas-box--smallest">
+                        <fang-line-chart 
+                            ng-if="$ctrl.redux.metrics.parsedData[0].line"
+                            series="$ctrl.redux.metrics.parsedData[0].line.series"
+                            config="$ctrl.redux.metrics.parsedData[0].line.config">
+                        </fang-line-chart>
+                    </div>
+                    </textarea>
+                </code>
+            </pre>
+            <p>BOOM our widget loos shiny and amazing.</p>         
+          
       </google-codelab-step>
       <google-codelab-step label="Extra visualizations?" step="7" duration="5">
-          <pre><code>Code here</code></pre>          
+          <p>We are almost done...</p>
+          <p>We are missing interactions in the module to click on the specific line chart metric we want to show.</p>
+          <p>For that if you go to widgets/visualizations, there is a component created for you with one binding as the data and with the click interaction.</p>
+          <p>Note: Remember to register your visualization components in our src/index.ts</p>
+          <pre>
+              <code><textarea readonly><div style="min-height:274px"></div>
+                    <fang-loader-wrapper loading="$ctrl.redux.metrics.fetching && !$ctrl.redux.metrics.failed" style="min-height: inherit;">
+                        <key-metrics-line-chart ng-if="$ctrl.redux.metrics.parsedData" data="$ctrl.redux.metrics.parsedData"></key-metrics-line-chart>
+                    </fang-loader-wrapper>
+                </div>
+              </textarea>
+              </code>
+          </pre>
       </google-codelab-step>
 </google-codelab>
 </body>
